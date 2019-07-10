@@ -8,8 +8,9 @@ RUN mkdir /build
 ADD . /build/
 WORKDIR /build
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-extldflags "-static"' -o main .
-FROM scratch
+FROM alpine:latest
 COPY --from=builder /build/main /app/
+COPY run.sh /app/
 WORKDIR /app
-CMD ["./main"]
+CMD ["sh", "-c", "/app/run.sh"]
 
